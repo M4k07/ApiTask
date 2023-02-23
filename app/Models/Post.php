@@ -16,15 +16,10 @@ class Post extends Model
         'body'
     ];
 
-    public function mapPostDataResponse($response){
-        $this->id = $response['id'];
-        $this->userId = $response['userId'];
-        $this->title = $response['title'];
-        $this->body = $response['body'];
-    }
     public $timestamps = false;
 
-    public function user(){
-        return $this->belongsTo(UserApi::class,'id','userId');
+    public function user()
+    {
+        return $this->belongsTo(UserApi::class, 'id', 'userId');
     }
 }

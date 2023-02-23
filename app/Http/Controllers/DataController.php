@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use App\Models\UserApi;
+use App\Models\Post;
+
+class DataController extends Controller
+{
+    public function importData()
+    {
+        $client = new Client();
+        $response = $client->get(env('API_URL_USER'));
+        $users = json_decode($response->getBody());
+
+        foreach ($users as $user) {
+            UserApi::updateOrCreate([
+                'id' => $user->id
+            ], [
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+            ]);
+        }
+
+        $response = $client->get(env('API_URL_POST'));
+        $posts = json_decode($response->getBody());
+
+        foreach ($posts as $post) {
+            $user = UserApi::where('id', $post->userId)->first();
+            if ($user) {
+                $user->posts()->updateOrCreate([
+                    'id' => $post->id
+                ], [
+                    'title' => $post->title,
+                    'body' => $post->body,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Data imported successfully!']);
+    }
+}

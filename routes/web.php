@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\DataController;
+use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/users', [UsersController::class, 'index'])->name('users.index');
-Route::get('/sync-users', [UsersController::class, 'syncUsers'])->name('users.sync');
+Route::middleware(['checkApiStatus'])->get('/import-data', [DataController::class, 'importData']);
+Route::get('send-mail', [MailController::class, 'index']);

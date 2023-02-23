@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckIfEndpointIsUp
@@ -16,12 +17,19 @@ class CheckIfEndpointIsUp
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $response = Http::get($request->url());
-        if($response->getStatusCode() !== 200) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'endpoint not responding'
-            ],500);
+        $client = new Client();
+
+        $endpoints = [
+            env("API_URL_USER"),
+            env("API_URL_POST"),
+        ];
+
+        foreach ($endpoints as $endpoint) {
+            $response = $client->get($endpoint);
+
+            if ($response->getStatusCode() !== 200) {
+                return response()->json(['error' => 'API endpoint is not responding'], 500);
+            }
         }
         return $next($request);
     }
