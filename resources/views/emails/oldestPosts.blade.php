@@ -1,7 +1,9 @@
 <html>
 
 <body>
-    {{$mailData}}
+    <pre>
+        {{print_r($mailData,true)}}
+    </pre>
 </body>
 
 </html>

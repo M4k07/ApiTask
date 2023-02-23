@@ -9,7 +9,24 @@ use App\Models\Post;
 
 class DataController extends Controller
 {
-    public function importData()
+    /**
+     * Import data from API endpoints and store in database
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *      path="/api/import-data",
+     *      tags={"Data Import"},
+     *      summary="Import data from API endpoints",
+     *      description="This endpoint imports data from two external API endpoints and stores it in the database",
+     *      produces={"application/json"},
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Data imported successfully"
+     *      )
+     * )
+     */
+    public function store()
     {
         $client = new Client();
         $response = $client->get(env('API_URL_USER'));

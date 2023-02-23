@@ -19,5 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['checkApiStatus'])->get('/import-data', [DataController::class, 'importData']);
-Route::get('send-mail', [MailController::class, 'index']);
+// Route::middleware(['checkApiStatus'])->get('/import-data', [DataController::class, 'importData']);
+// Route::get('send-mail', [MailController::class, 'index']);

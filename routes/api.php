@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\api\UserController;
-use App\Http\Middleware\CheckIfEndpointIsUp;
+use App\Http\Controllers\DataController;
+use App\Http\Controllers\MailController;
+// use App\Http\Middleware\CheckIfEndpointIsUp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('/users-and-posts',[UserController::class ,'index'])->middleware(CheckIfEndpointIsUp::class);
+Route::middleware(['checkApiStatus'])->get('/import-data', [DataController::class, 'store']);
+Route::get('send-mail', [MailController::class, 'index']);
